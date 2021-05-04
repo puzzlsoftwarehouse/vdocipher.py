@@ -1,0 +1,7 @@
+.idea
+venv
+build/
+dist/
+vdocipher.py.egg-info
+.pytest_cache/
+.pypirc
