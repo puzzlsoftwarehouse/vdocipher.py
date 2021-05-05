@@ -59,10 +59,18 @@ class Video:
 
         return videos
 
-    def get_video(self) -> 'Video':
+    def get(self) -> 'Video':
         response = get(url=f'{VIDEOS}/{self.id}')
 
         return self.from_dict(response.json())
+
+    def query(self, query: str = None) -> List['Video']:
+        querystring = {"q": query}
+
+        response = get(url=VIDEOS, params=querystring)
+        videos = [self.from_dict(video) for video in response.json()['rows']]
+
+        return videos
 
     def create_upload_credentials(self) -> UploadCredentials:
         response = UploadCredentials().create(self.title)
@@ -70,7 +78,6 @@ class Video:
         return response
 
     def create_otp(self, ttl: int = 300) -> OTP:
-
         otp = OTP().create(self.id, ttl)
 
         return otp
