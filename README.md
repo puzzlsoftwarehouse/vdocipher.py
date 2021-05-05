@@ -28,6 +28,9 @@ new_video = vdocipher.Video(title='title').upload('file')
 # obtaining a video
 video = vdocipher.Video(id=1).get()
 
+# search for videos
+videos = vdocipher.Video().query('some_text')
+
 # removing a video
 vdocipher.Video(id=1).delete()
 
