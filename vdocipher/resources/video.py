@@ -52,8 +52,8 @@ class Video:
     status: str = None
     public: int = None
 
-    def get_list(self) -> List['Video']:
-        response = get(url=VIDEOS)
+    def get_list(self, page: int = 1, limit: int = 10) -> List['Video']:
+        response = get(url=f'{VIDEOS}?page={page}&limit={limit}')
 
         videos = [self.from_dict(video) for video in response.json()['rows']]
 

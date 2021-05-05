@@ -5,7 +5,7 @@ with open('README.md') as readme_file:
 
 setup_args = dict(
     name='vdocipher.py',
-    version='0.2.2',
+    version='0.3.0',
     url='https://github.com/puzzlsoftwarehouse/vdocipher.py',
     license='MIT License',
     author='Puzzl Software House',

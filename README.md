@@ -48,7 +48,16 @@ $ cd vdocipher.py
 $ python -m venv .venv
 $ source .venv/bin/activate
 $ pip install .[dev]
-```   
+```
+
+build and publish
+
+```shell script
+$ python setup.py sdist bdist_wheel
+$ twine upload -r pypi dist/*
+```
+
+
 
     
     
