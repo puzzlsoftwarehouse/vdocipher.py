@@ -14,6 +14,19 @@ class TestVideo:
         assert len(videos) > 0
         [isinstance(video_obj, Video) for video_obj in videos[:5]]
 
+    def test_video_get_list_pagination(self, vdocipher):
+        video_list = [vdocipher.Video(title=f'test {i}').upload('resources/test_file.mp4') for i in range(3)]
+
+        number_page = 1
+        page_limit = 2
+
+        videos = vdocipher.Video().get_list(number_page, page_limit)
+
+        assert len(videos) <= page_limit
+        [isinstance(video_obj, Video) for video_obj in videos]
+
+        [video.delete() for video in video_list]
+
     def test_video_upload_credentials(self, vdocipher):
         upload_credentials = vdocipher.UploadCredentials().create(title='test')
 
@@ -29,7 +42,6 @@ class TestVideo:
         vdocipher.Video(id=upload_credentials.video_id).delete()
 
     def test_video_upload(self, video: Video):
-
         assert isinstance(video, Video)
         assert video.id
 
@@ -45,4 +57,3 @@ class TestVideo:
         assert video_obj.id == video.id
         assert video_obj.title == video.title
         assert video_obj.status == 'PRE-Upload'
-
