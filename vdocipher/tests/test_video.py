@@ -42,6 +42,7 @@ class TestVideo:
         vdocipher.Video(id=upload_credentials.video_id).delete()
 
     def test_video_upload(self, video: Video):
+
         assert isinstance(video, Video)
         assert video.id
 
@@ -57,3 +58,12 @@ class TestVideo:
         assert video_obj.id == video.id
         assert video_obj.title == video.title
         assert video_obj.status == 'PRE-Upload'
+
+    def test_create_otp(self, video):
+
+        otp = video.create_otp()
+
+        assert otp.otp
+        assert otp.playback_info
+
+

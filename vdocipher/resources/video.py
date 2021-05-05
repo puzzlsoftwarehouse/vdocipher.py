@@ -4,6 +4,7 @@ from dataclasses import dataclass, field
 from dataclasses_json import dataclass_json, config
 from requests_toolbelt import MultipartEncoder
 
+from vdocipher.resources.otp import OTP
 from vdocipher.resources.request import get, put, post, delete
 from vdocipher.resources.routes.base import VIDEOS
 
@@ -63,15 +64,21 @@ class Video:
 
         return self.from_dict(response.json())
 
-    def get_upload_credentials(self) -> UploadCredentials:
+    def create_upload_credentials(self) -> UploadCredentials:
         response = UploadCredentials().create(self.title)
 
         return response
 
+    def create_otp(self, ttl: int = 300) -> OTP:
+
+        otp = OTP().create(self.id, ttl)
+
+        return otp
+
     def upload(self, file) -> 'Video':
         file = open(file, 'rb')
 
-        credentials = self.get_upload_credentials()
+        credentials = self.create_upload_credentials()
 
         m = MultipartEncoder(fields=[
             ('x-amz-credential', credentials.client_payload.x_amz_credential),

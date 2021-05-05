@@ -19,24 +19,35 @@ vdocipher.authenticate('VDOCIPHER_API_SECRET')
 
 # Examples:
 
-# get a list of videos
+# obtaining a list of videos
 videos = vdocipher.Video().get_list()
 
-# upload a new video
+# uploading a video
 new_video = vdocipher.Video(title='title').upload('file')
 
-# get a video
+# obtaining a video
 video = vdocipher.Video(id=1).get()
 
-# delete
+# removing a video
 vdocipher.Video(id=1).delete()
+
+# obtaining OTP
+
+otp = OTP().create(videoid='your_video_id')
+
+# or
+otp = Video(title='test video').upload('file').create_otp()
 ```
 
 Installing dev requirements
 --------
 
 ```shell script 
-$ pip install vdocipher.py[dev]
+$ git clone https://github.com/puzzlsoftwarehouse/vdocipher.py.git
+$ cd vdocipher.py
+$ python -m venv .venv
+$ source .venv/bin/activate
+$ pip install .[dev]
 ```   
 
     
