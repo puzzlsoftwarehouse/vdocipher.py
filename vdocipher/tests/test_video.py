@@ -46,3 +46,11 @@ class TestVideo:
         assert video_obj.title == video.title
         assert video_obj.status == 'PRE-Upload'
 
+    def test_create_otp(self, video):
+
+        otp = video.create_otp()
+
+        assert otp.otp
+        assert otp.playback_info
+
+

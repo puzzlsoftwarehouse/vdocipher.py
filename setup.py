@@ -1,11 +1,11 @@
-from setuptools import setup
+from setuptools import setup, find_packages
 
 with open('README.md') as readme_file:
     README = readme_file.read()
 
 setup_args = dict(
     name='vdocipher.py',
-    version='0.1.1',
+    version='0.2.1',
     url='https://github.com/puzzlsoftwarehouse/vdocipher.py',
     license='MIT License',
     author='Puzzl Software House',
@@ -14,7 +14,7 @@ setup_args = dict(
     description='Just a VdoCipher api wrapper for python.',
     long_description_content_type="text/markdown",
     long_description=README,
-    packages=[],
+    packages=find_packages(),
 )
 
 install_requires = [
