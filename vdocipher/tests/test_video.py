@@ -13,7 +13,6 @@ class TestVideo:
 
         assert len(videos) > 0
         [isinstance(video_obj, Video) for video_obj in videos[:5]]
-        print(videos)
 
     def test_video_get_list_pagination(self, vdocipher):
         video_list = [vdocipher.Video(title=f'test {i}').upload('resources/test_file.mp4') for i in range(3)]
@@ -77,12 +76,3 @@ class TestVideo:
 
         assert otp.otp
         assert otp.playback_info
-
-    def test_list_delete(self, vdocipher):
-        id_example = 'e831dc3da9774eb984ff398942904489'
-
-        video_list_id = vdocipher.Video().get_list()
-
-        for i in video_list_id:
-            if i.id != id_example:
-                i.delete()
