@@ -40,6 +40,22 @@ otp = OTP().create(videoid='your_video_id')
 
 # or
 otp = Video(title='test video').upload('file').create_otp()
+
+# opt with anotations
+
+ annotate = Annotate(
+            annotation_type='text' # Set type parameter as "rtext" for Dynamic watermark
+            text='Name: {name}, email: {email}, IP: {ip}', # You can add user identifiable information
+            alpha='0.60',
+            x='10',
+            y='10',
+            color='0xFF0000',
+            size='15',
+            interval='5000',
+            skip='200'
+        )
+ annotate_list = [annotate]
+ otp = vdocipher.OTP(annotations=annotate_list).create(videoid='your_video_id')
 ```
 
 Installing dev requirements
