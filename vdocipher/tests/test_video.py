@@ -51,6 +51,9 @@ class TestVideo:
         assert response.status_code == 200
         assert "Successfully deleted 1 videos" in response.json()['message']
 
+    def test_delete(self,vdocipher):
+        videos_to_test = vdocipher.Video(id='cfc80862639d45ba8ade5b0b90332f44').delete()
+
     def test_video_get(self, video):
         video_obj = video.get()
 

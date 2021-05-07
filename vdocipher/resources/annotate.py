@@ -6,7 +6,7 @@ from dataclasses_json import dataclass_json, config
 @dataclass_json
 @dataclass
 class Annotate:
-    annotation_type: str = field(metadata=config(field_name="type"), default=None)
+    annotation_type: str = field(metadata=config(field_name="type"), default='text')
     text: str = None
     alpha: str = None
     color: str = None
