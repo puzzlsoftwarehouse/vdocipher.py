@@ -56,6 +56,18 @@ otp = Video(title='test video').upload('file').create_otp()
         )
  annotate_list = [annotate]
  otp = vdocipher.OTP(annotations=annotate_list).create(videoid='your_video_id')
+ 
+ # generating OTP for offline use
+
+ duration = 15 * 24 * 3600 
+ rule = LicenseRules(
+     can_persist=True,
+     rental_duration=duration
+ )
+ otp = vdocipher.OTP(license_rules=rule).create(videoid='your_video_id')
+ 
+ 
+
 ```
 
 Installing dev requirements
