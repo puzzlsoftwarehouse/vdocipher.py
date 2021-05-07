@@ -1,4 +1,5 @@
 from vdocipher.resources.annotate import Annotate
+from vdocipher.resources.ip_geo_rules import IPGeoRules
 from vdocipher.resources.license_rules import LicenseRules
 from vdocipher.resources.otp import OTP
 
@@ -30,13 +31,32 @@ class TestOTP:
         assert otp.playback_info
 
     def test_create_otp_with_license_rules(self, vdocipher, video):
-
         duration = 15 * 24 * 3600
         rule = LicenseRules(
             can_persist=True,
             rental_duration=duration
         )
         otp = vdocipher.OTP(license_rules=rule).create(video_id=video.id)
+
+        assert isinstance(otp, OTP)
+        assert otp.otp
+        assert otp.playback_info
+
+    def test_create_opt_with_white_list_href(self, vdocipher, video):
+        otp = vdocipher.OTP(white_list_href="vdocipher.com").create(video_id=video.id)
+
+        assert isinstance(otp, OTP)
+        assert otp.otp
+        assert otp.playback_info
+
+    def test_create_opt_with_ip_geo_rules(self, vdocipher, video):
+        geo_rules = IPGeoRules(
+            actions=True,
+            ip_set=[],
+            country_set=["IN", "GB"]
+        )
+        geo_rules_list = [geo_rules]
+        otp = vdocipher.OTP(ip_geo_rules=geo_rules_list).create(video_id=video.id)
 
         assert isinstance(otp, OTP)
         assert otp.otp

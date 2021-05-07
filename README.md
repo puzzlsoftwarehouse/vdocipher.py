@@ -66,6 +66,21 @@ otp = Video(title='test video').upload('file').create_otp()
  )
  otp = vdocipher.OTP(license_rules=rule).create(videoid='your_video_id')
  
+ # opt with url whitelist
+ 
+ url = "vdocipher.com"
+ otp = vdocipher.OTP(white_list_href=url).create(videoid='your_video_id')
+ 
+ # otp with IP and GeoRules
+ 
+ geo_rules = IPGeoRules(
+     actions=True,
+     ip_set=["122.0.0.0/16", "49.323.23.56"],
+     country_set=["IN", "GB"]
+    )
+ geo_rules_list = [geo_rules]
+ otp = vdocipher.OTP(ip_geo_rules=geo_rules_list).create(videoid='your_video_id')
+ 
  
 
 ```
