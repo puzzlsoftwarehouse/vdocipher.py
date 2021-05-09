@@ -34,6 +34,9 @@ videos = vdocipher.Video().query('some_text')
 # removing a video
 vdocipher.Video(id=1).delete()
 
+# adding a video subtitle
+subtitle = vdocipher.Video(id=1).upload_subtitle('file')
+
 # obtaining OTP
 
 otp = OTP().create(videoid='your_video_id')
@@ -66,8 +69,6 @@ otp = Video(title='test video').upload('file').create_otp()
  )
  otp = vdocipher.OTP(license_rules=rule).create(videoid='your_video_id')
  
- 
-
 ```
 
 Installing dev requirements

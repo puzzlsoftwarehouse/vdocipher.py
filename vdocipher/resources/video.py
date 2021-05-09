@@ -1,4 +1,5 @@
-from typing import List
+from datetime import datetime
+from typing import List, IO
 
 from dataclasses import dataclass, field
 from dataclasses_json import dataclass_json, config
@@ -44,6 +45,15 @@ class UploadCredentials:
 
 @dataclass_json
 @dataclass
+class Subtitle:
+    id: str
+    time: str
+    size: str
+    lang: str
+
+
+@dataclass_json
+@dataclass
 class Video:
     id: str = None
     title: str = None
@@ -82,12 +92,11 @@ class Video:
 
         return otp
 
-    def upload(self, file) -> 'Video':
-        file = open(file, 'rb')
+    def upload(self, file: IO) -> 'Video':
 
         credentials = self.create_upload_credentials()
 
-        m = MultipartEncoder(fields=[
+        data = MultipartEncoder(fields=[
             ('x-amz-credential', credentials.client_payload.x_amz_credential),
             ('x-amz-algorithm', credentials.client_payload.x_amz_algorithm),
             ('x-amz-date', credentials.client_payload.x_amz_date),
@@ -101,14 +110,32 @@ class Video:
 
         response = post(
             url=credentials.client_payload.uploadLink,
-            data=m,
-            headers={'Content-Type': m.content_type}
+            data=data,
+            headers={'Content-Type': data.content_type},
+            use_api_secret=False
         )
 
         if response.status_code == 201:
             self.id = credentials.video_id
 
             return self
+
+    def upload_subtitle(self,
+                        subtitle_file: IO,
+                        language: str = 'en') -> Subtitle:
+
+        querystring = {'language': language}
+
+        data = MultipartEncoder(fields=[
+            (f'file', (subtitle_file.name, subtitle_file, 'text/vtt'))
+        ])
+
+        response = post(url=f'{VIDEOS}/{self.id}/files',
+                        params=querystring,
+                        headers={'Content-Type': data.content_type},
+                        data=data)
+
+        return Subtitle.from_dict(response.json())
 
     def delete(self):
         querystring = {'videos': f"{self.id}"}

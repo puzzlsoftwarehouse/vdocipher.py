@@ -1,4 +1,8 @@
+from typing import IO, List
+
 import requests
+from requests.structures import CaseInsensitiveDict
+from requests_toolbelt import MultipartEncoder
 
 API_SECRET = ''
 
@@ -16,12 +20,18 @@ def fetch_json(
         http_method: str = "GET",
         data=None,
         params=None,
-        headers=None
+        headers=None,
+        use_api_secret: bool = True
 ):
     if not headers:
-        headers = {'Content-type': 'application/json',
-                   'Accept': 'application/json',
-                   "Authorization": f'Apisecret {API_SECRET}'}
+        headers = {
+            'Content-Type': 'application/json',
+            'Authorization': f'Apisecret {API_SECRET}'
+        }
+
+    headers['Accept'] = 'application/json'
+    if use_api_secret:
+        headers['Authorization'] = f'Apisecret {API_SECRET}'
 
     response = requests.request(method=http_method,
                                 url=url,
@@ -44,12 +54,19 @@ def get(url: str, data: dict = None, params: dict = None):
     return response
 
 
-def post(url: str, data=None, params: dict = None, headers: dict = None):
+def post(url: str,
+         data=None,
+         params: dict = None,
+         headers: dict = None,
+         use_api_secret: bool = True
+         ):
+
     response = fetch_json(url=url,
                           http_method="POST",
                           data=data,
                           params=params,
-                          headers=headers)
+                          headers=headers,
+                          use_api_secret=use_api_secret)
 
     return response
 

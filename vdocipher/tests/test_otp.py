@@ -1,16 +1,17 @@
 from vdocipher.resources.annotate import Annotate
 from vdocipher.resources.license_rules import LicenseRules
 from vdocipher.resources.otp import OTP
+from vdocipher.tests.conftest import BaseTest
 
 
-class TestOTP:
+class TestOTP(BaseTest):
 
-    def test_create_otp(self, vdocipher, video):
-        otp = vdocipher.OTP().create(video_id=video.id)
+    def test_create_otp(self, video):
+        otp = self.vdocipher.OTP().create(video_id=video.id)
 
         assert isinstance(otp, OTP)
 
-    def test_create_otp_with_annotate(self, vdocipher, video):
+    def test_create_otp_with_annotate(self, video):
         annotate = Annotate(
             annotation_type='rtext',
             text='name',
@@ -23,20 +24,20 @@ class TestOTP:
             skip='200'
         )
         annotate_list = [annotate]
-        otp = vdocipher.OTP(annotations=annotate_list).create(video_id=video.id)
+        otp = self.vdocipher.OTP(annotations=annotate_list).create(video_id=video.id)
 
         assert isinstance(otp, OTP)
         assert otp.otp
         assert otp.playback_info
 
-    def test_create_otp_with_license_rules(self, vdocipher, video):
+    def test_create_otp_with_license_rules(self, video):
 
         duration = 15 * 24 * 3600
         rule = LicenseRules(
             can_persist=True,
             rental_duration=duration
         )
-        otp = vdocipher.OTP(license_rules=rule).create(video_id=video.id)
+        otp = self.vdocipher.OTP(license_rules=rule).create(video_id=video.id)
 
         assert isinstance(otp, OTP)
         assert otp.otp
