@@ -1,3 +1,4 @@
+import json
 from typing import List, IO
 
 from dataclasses import dataclass, field
@@ -134,7 +135,16 @@ class Video:
 
         return Subtitle.from_dict(response.json())
 
+    def add_tag(self, videos_id: List = None, tags: List = None):
 
+        payload = json.dumps({
+            "videos": videos_id,
+            "tags": tags
+        })
+
+        response = post(url=f'{VIDEOS}/tags', data=payload)
+
+        return response.json()
 
     def delete_subtitle(self, file_id: str = None):
         response = delete(url=f'{VIDEOS}/{self.id}/files/{file_id}')

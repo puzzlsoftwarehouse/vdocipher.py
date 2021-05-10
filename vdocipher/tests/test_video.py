@@ -10,6 +10,8 @@ class TestVideo(BaseTest):
         assert len(videos) > 0
         [isinstance(video_obj, Video) for video_obj in videos[:5]]
 
+
+
     def test_video_get_list_pagination(self):
         video_list = [self.vdocipher.Video(title=f'test {i}').upload('resources/test_file.mp4') for i in range(3)]
 
@@ -68,6 +70,16 @@ class TestVideo(BaseTest):
         assert videos_list[0].title == query_test
 
         [video.delete() for video in videos_to_test]
+
+    def test_add_tag_videos(self):
+        video_list_id = [self.vdocipher.Video(title=f'test-tag-{i}').upload('resources/test_file.mp4').id for i in
+                       range(2)]
+        tag_list = ['Modelagem 3D', 'Games', 'Unity']
+
+        response = self.vdocipher.Video().add_tag(videos_id=video_list_id, tags=tag_list)
+
+        assert response['message'] == 'Done'
+        [Video(id=video_id).delete() for video_id in video_list_id]
 
     def test_create_otp(self, video):
         otp = video.create_otp()
