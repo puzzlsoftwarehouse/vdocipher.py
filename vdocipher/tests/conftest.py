@@ -6,22 +6,23 @@ import vdocipher as vdocipher_lib
 from vdocipher import Video
 
 
-@pytest.fixture
-def vdocipher():
+class BaseTest:
 
-    vdocipher_lib.authenticate(os.getenv('VDOCIPHER_API_SECRET'))
+    vdocipher = vdocipher_lib
+    vdocipher.authenticate(os.getenv('VDOCIPHER_API_SECRET', default=''))
 
-    return vdocipher_lib
+    @pytest.yield_fixture
+    def video(self) -> Video:
 
+        with open('resources/test_file.mp4', 'rb') as file:
+            video_name = f'test - {datetime.now()}'
 
-@pytest.yield_fixture
-def video(vdocipher) -> Video:
+            video_obj = self.vdocipher.Video(title=video_name).upload(file)
 
-    video_name = f'test - {datetime.now()}'
+            assert isinstance(video_obj, Video)
+            assert video_obj.id
 
-    video_obj = vdocipher.Video(title=video_name).upload('resources/test_file.mp4')
+            yield video_obj
 
-    yield video_obj
-
-    video_obj.delete()
+            video_obj.delete()
 
