@@ -1,5 +1,5 @@
 from vdocipher.resources.annotate import Annotate
-from vdocipher.resources.ip_geo_rules import IPGeoRules
+from vdocipher.resources.ip_geo_rule import IPGeoRule
 from vdocipher.resources.license_rules import LicenseRules
 from vdocipher.resources.otp import OTP
 from vdocipher.tests.conftest import BaseTest
@@ -52,7 +52,7 @@ class TestOTP(BaseTest):
         assert otp.playback_info
 
     def test_create_opt_with_ip_geo_rules(self, video):
-        geo_rules = IPGeoRules(
+        geo_rules = IPGeoRule(
             actions=True,
             ip_set=[],
             country_set=["IN", "GB"]
