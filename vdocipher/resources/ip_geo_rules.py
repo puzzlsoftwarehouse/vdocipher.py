@@ -6,7 +6,7 @@ from dataclasses_json import dataclass_json, config
 
 @dataclass_json
 @dataclass
-class IPGeoRules:
+class IPGeoRule:
     actions: bool = None
     ip_set: List = field(metadata=config(field_name="ipSet"), default=None)
     country_set: List = field(metadata=config(field_name="countrySet"), default=None)
