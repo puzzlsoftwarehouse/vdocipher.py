@@ -44,21 +44,21 @@ class TestOTP(BaseTest):
         assert otp.otp
         assert otp.playback_info
 
-    def test_create_opt_with_white_list_href(self, vdocipher, video):
-        otp = vdocipher.OTP(white_list_href="vdocipher.com").create(video_id=video.id)
+    def test_create_opt_with_white_list_href(self, video):
+        otp = self.vdocipher.OTP(white_list_href="vdocipher.com").create(video_id=video.id)
 
         assert isinstance(otp, OTP)
         assert otp.otp
         assert otp.playback_info
 
-    def test_create_opt_with_ip_geo_rules(self, vdocipher, video):
+    def test_create_opt_with_ip_geo_rules(self, video):
         geo_rules = IPGeoRules(
             actions=True,
             ip_set=[],
             country_set=["IN", "GB"]
         )
         geo_rules_list = [geo_rules]
-        otp = vdocipher.OTP(ip_geo_rules=geo_rules_list).create(video_id=video.id)
+        otp = self.vdocipher.OTP(ip_geo_rules=geo_rules_list).create(video_id=video.id)
 
         assert isinstance(otp, OTP)
         assert otp.otp
