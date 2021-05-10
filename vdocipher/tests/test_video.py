@@ -1,4 +1,3 @@
-
 from vdocipher import Video
 from vdocipher.tests.conftest import BaseTest
 
@@ -56,7 +55,8 @@ class TestVideo(BaseTest):
         assert video_obj.status == 'PRE-Upload'
 
     def test_video_get_query(self):
-        videos_to_test = [self.vdocipher.Video(title=f'test-query-{i}').upload('resources/test_file.mp4') for i in range(3)]
+        videos_to_test = [self.vdocipher.Video(title=f'test-query-{i}').upload('resources/test_file.mp4') for i in
+                          range(3)]
 
         query_test = 'test-query-2'
         videos_list = self.vdocipher.Video().query(query=query_test)

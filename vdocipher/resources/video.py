@@ -1,4 +1,3 @@
-from datetime import datetime
 from typing import List, IO
 
 from dataclasses import dataclass, field
@@ -93,7 +92,6 @@ class Video:
         return otp
 
     def upload(self, file: IO) -> 'Video':
-
         credentials = self.create_upload_credentials()
 
         data = MultipartEncoder(fields=[
@@ -123,7 +121,6 @@ class Video:
     def upload_subtitle(self,
                         subtitle_file: IO,
                         language: str = 'en') -> Subtitle:
-
         querystring = {'language': language}
 
         data = MultipartEncoder(fields=[
@@ -136,6 +133,13 @@ class Video:
                         data=data)
 
         return Subtitle.from_dict(response.json())
+
+
+
+    def delete_subtitle(self, file_id: str = None):
+        response = delete(url=f'{VIDEOS}/{self.id}/files/{file_id}')
+
+        return response.json()
 
     def delete(self):
         querystring = {'videos': f"{self.id}"}
