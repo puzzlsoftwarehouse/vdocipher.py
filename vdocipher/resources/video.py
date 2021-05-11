@@ -183,4 +183,8 @@ class Video:
         return response
 
     def _delete_all(self):
-        ...
+        list_videos = self.get_list(page=1, limit=4)
+
+        [video.delete() for video in list_videos]
+
+        return 'All videos deleted'
