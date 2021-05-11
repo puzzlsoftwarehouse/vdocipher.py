@@ -4,7 +4,7 @@ from vdocipher.tests.conftest import BaseTest
 
 class TestVideo(BaseTest):
 
-    def test_video_get_list(self):
+    def test_video_get_list(self, video: Video):
         videos = self.vdocipher.Video().get_list()
 
         assert len(videos) > 0

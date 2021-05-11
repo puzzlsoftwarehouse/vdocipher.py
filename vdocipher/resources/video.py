@@ -88,7 +88,7 @@ class Video:
             "tags": tags
         }
 
-        response = post(url=f'{VIDEOS}/tags', data=payload)
+        response = post(url=f'{VIDEOS}/tags', data=json.dumps(payload))
 
         return response.json()
 
@@ -111,7 +111,7 @@ class Video:
             "tags": tags
         }
 
-        response = put(url=f'{VIDEOS}/tags', data=payload)
+        response = put(url=f'{VIDEOS}/tags', data=json.dumps(payload))
 
         return response.json()
 
@@ -181,3 +181,6 @@ class Video:
             params=querystring
         )
         return response
+
+    def _delete_all(self):
+        ...

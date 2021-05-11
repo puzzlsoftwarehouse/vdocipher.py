@@ -36,6 +36,6 @@ class OTP:
         if self.ip_geo_rules:
             data['ipGeoRules'] = json.dumps([ip_rule.to_dict() for ip_rule in self.ip_geo_rules])
 
-        response = post(url=f'{VIDEOS}/{video_id}/otp', data=data)
+        response = post(url=f'{VIDEOS}/{video_id}/otp', data=json.dumps(data))
 
         return self.from_dict(response.json())
