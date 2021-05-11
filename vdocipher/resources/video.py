@@ -90,6 +90,11 @@ class Video:
 
         return videos
 
+    def list_tags(self):
+        response = get(url=f'{VIDEOS}/tags')
+
+        return response.json()['rows']
+
     def create_upload_credentials(self) -> UploadCredentials:
         response = UploadCredentials().create(self.title)
 

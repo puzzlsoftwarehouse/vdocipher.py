@@ -96,6 +96,19 @@ class TestVideo(BaseTest):
 
         [Video(id=video_id).delete() for video_id in video_list_id]
 
+    def test_get_all_tags(self):
+        video_list_id = [self.vdocipher.Video(title=f'test-tag-{i}').upload('resources/test_file.mp4').id for i in
+                         range(2)]
+        tag_list = ['Modelagem 3D', 'Games', 'Unity']
+
+        add_tag = self.vdocipher.Video().add_tag(videos_id=video_list_id, tags=tag_list)
+
+        response = self.vdocipher.Video().list_tags()
+
+        assert len(response) > 0
+
+        [Video(id=video_id).delete() for video_id in video_list_id]
+
     def test_create_otp(self, video):
         otp = video.create_otp()
 
