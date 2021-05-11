@@ -82,6 +82,14 @@ class Video:
 
         return videos
 
+    def search_tag(self, tag: str = None) -> List['Video']:
+        querystring = {"tags": tag}
+        response = get(url=VIDEOS, params=querystring)
+
+        videos = [self.from_dict(video) for video in response.json()['rows']]
+
+        return videos
+
     def create_upload_credentials(self) -> UploadCredentials:
         response = UploadCredentials().create(self.title)
 
@@ -136,7 +144,6 @@ class Video:
         return Subtitle.from_dict(response.json())
 
     def add_tag(self, videos_id: List = None, tags: List = None):
-
         payload = json.dumps({
             "videos": videos_id,
             "tags": tags
