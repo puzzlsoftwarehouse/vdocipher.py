@@ -82,6 +82,16 @@ class Video:
 
         return videos
 
+    def add_tag(self, videos_id: List = None, tags: List = None):
+        payload = {
+            "videos": videos_id,
+            "tags": tags
+        }
+
+        response = post(url=f'{VIDEOS}/tags', data=payload)
+
+        return response.json()
+
     def search_tag(self, tag: str = None) -> List['Video']:
         querystring = {"tags": tag}
         response = get(url=VIDEOS, params=querystring)
@@ -94,6 +104,16 @@ class Video:
         response = get(url=f'{VIDEOS}/tags')
 
         return response.json()['rows']
+
+    def replace_tag(self, videos_id: List = None, tags: List = None):
+        payload = {
+            "videos": videos_id,
+            "tags": tags
+        }
+
+        response = put(url=f'{VIDEOS}/tags', data=payload)
+
+        return response.json()
 
     def create_upload_credentials(self) -> UploadCredentials:
         response = UploadCredentials().create(self.title)
@@ -147,16 +167,6 @@ class Video:
                         data=data)
 
         return Subtitle.from_dict(response.json())
-
-    def add_tag(self, videos_id: List = None, tags: List = None):
-        payload = json.dumps({
-            "videos": videos_id,
-            "tags": tags
-        })
-
-        response = post(url=f'{VIDEOS}/tags', data=payload)
-
-        return response.json()
 
     def delete_subtitle(self, file_id: str = None):
         response = delete(url=f'{VIDEOS}/{self.id}/files/{file_id}')

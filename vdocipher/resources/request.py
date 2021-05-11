@@ -1,8 +1,7 @@
-from typing import IO, List
+import json
 
 import requests
-from requests.structures import CaseInsensitiveDict
-from requests_toolbelt import MultipartEncoder
+
 
 API_SECRET = ''
 
@@ -35,7 +34,7 @@ def fetch_json(
 
     response = requests.request(method=http_method,
                                 url=url,
-                                data=data,
+                                data=json.dumps(data),
                                 headers=headers,
                                 params=params)
 
