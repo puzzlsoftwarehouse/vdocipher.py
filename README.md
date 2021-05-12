@@ -22,6 +22,9 @@ vdocipher.authenticate('VDOCIPHER_API_SECRET')
 # obtaining a list of videos
 videos = vdocipher.Video().get_list()
 
+# obtaining a list of all videos
+videos = vdocipher.Video().get_all()
+
 # uploading a video
 new_video = vdocipher.Video(title='title').upload('file')
 

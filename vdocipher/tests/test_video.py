@@ -8,6 +8,7 @@ class TestVideo(BaseTest):
         videos = self.vdocipher.Video().get_list()
 
         assert len(videos) > 0
+
         [isinstance(video_obj, Video) for video_obj in videos[:5]]
 
     def test_video_get_list_pagination(self):
@@ -22,6 +23,13 @@ class TestVideo(BaseTest):
         [isinstance(video_obj, Video) for video_obj in videos]
 
         [video.delete() for video in video_list]
+
+    def test_video_get_all_video(self, video: Video):
+        videos = self.vdocipher.Video().get_all()
+
+        assert len(videos) > 0
+
+        [isinstance(video_obj, Video) for video_obj in videos[:5]]
 
     def test_video_upload_credentials(self):
         upload_credentials = self.vdocipher.UploadCredentials().create(title='test')
@@ -69,19 +77,30 @@ class TestVideo(BaseTest):
 
         [video.delete() for video in videos_to_test]
 
-    def test_add_tag_to_video(self, video):
-        response = video.add_tag(['Ubuntu', 'Blender'])
+    def test_add_tag_to_video(self, video: Video):
+        tags = ['Ubuntu', 'Blender']
+        response = video.add_tag(tags=tags)
 
         assert response['message'] == 'Done'
+
+        assert set(video.get().tags).intersection(set(tags))
 
     def test_add_tag_to_video_ids(self):
         video_list_id = [self.vdocipher.Video(title=f'test-tag-{i}').upload('resources/test_file.mp4').id for i in
                          range(2)]
-        tag_list = ['Modelagem 3D', 'Games', 'Unity']
+        tag_list = ['Modelagem 3D', 'Games', 'Unity', 'Godot']
 
         response = self.vdocipher.Video().add_tag_to_video_ids(videos_id=video_list_id, tags=tag_list)
 
         assert response['message'] == 'Done'
+
+        for video_id in video_list_id:
+            tag_video = self.vdocipher.Video(id=video_id).get().tags
+            tag_video_set = set(tag_video)
+            tag_list_set = set(tag_list)
+
+            assert tag_video_set.intersection(tag_list_set)
+
         [Video(id=video_id).delete() for video_id in video_list_id]
 
     def test_get_videos_by_tag(self):
@@ -123,11 +142,15 @@ class TestVideo(BaseTest):
     def test_repalce_tag(self, video):
         video_obj = video
 
-        video_obj.add_tag(['BLender', '3d', 'Photoshop'])
+        video_tag = ['BLender', '3d', 'Photoshop']
+        video_obj.add_tag(video_tag)
 
-        response = video_obj.replace_tag(['Capture-one', 'Zbrush'])
+        video_tag_replace = ['Capture-one', 'Zbrush']
+        response = video_obj.replace_tag(video_tag_replace)
 
         assert response['message'] == 'Done'
+
+        assert set(video_obj.get().tags).intersection(set(video_tag_replace))
 
     def test_replace_tag_to_video_ids(self):
         video_list_id = [self.vdocipher.Video(title=f'test-tag-{i}').upload('resources/test_file.mp4').id for i in
@@ -142,6 +165,13 @@ class TestVideo(BaseTest):
 
         assert response['message'] == 'Done'
 
+        for video_id in video_list_id:
+            tag_video = self.vdocipher.Video(id=video_id).get().tags
+            tag_video_set = set(tag_video)
+            tag_list_replace_set = set(tag_list_replace)
+
+            assert tag_video_set.intersection(tag_list_replace_set)
+
         [Video(id=video_id).delete() for video_id in video_list_id]
 
     def test_delete_tags(self, video):
@@ -152,6 +182,7 @@ class TestVideo(BaseTest):
         response = video_obj.delete_tag()
 
         assert response['message'] == 'Done'
+        assert not (set(video_obj.get().tags).intersection(set([])))
 
     def test_delete_tag_to_video_ids(self):
         video_list_id = [self.vdocipher.Video(title=f'test-tag-{i}').upload('resources/test_file.mp4').id for i in
@@ -164,6 +195,12 @@ class TestVideo(BaseTest):
 
         assert response['message'] == 'Done'
 
+        for video_id in video_list_id:
+            tag_video = self.vdocipher.Video(id=video_id).get().tags
+            tag_video_set = set(tag_video)
+
+            assert not tag_video_set.intersection([])
+
         [Video(id=video_id).delete() for video_id in video_list_id]
 
     def test_create_otp(self, video):
@@ -171,3 +208,4 @@ class TestVideo(BaseTest):
 
         assert otp.otp
         assert otp.playback_info
+

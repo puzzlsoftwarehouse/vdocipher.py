@@ -5,6 +5,7 @@ from dataclasses import dataclass, field
 from dataclasses_json import dataclass_json, config
 from requests_toolbelt import MultipartEncoder
 
+from vdocipher.resources.ip_geo_rule import IPGeoRule
 from vdocipher.resources.otp import OTP
 from vdocipher.resources.request import get, put, post, delete
 from vdocipher.resources.routes.base import VIDEOS
@@ -61,6 +62,13 @@ class Video:
     length: int = None
     status: str = None
     public: int = None
+    upload_time: int = None
+    white_list_href: str = field(metadata=config(field_name="whitelisthref"), default=None)
+    ip_geo_rules: List[IPGeoRule] = field(metadata=config(field_name="ipGeoRules"), default=None)
+    posters: List = None
+    poster: str = None
+    total_sinze_bytes: int = field(metadata=config(field_name="totalSinzeBytes"), default=None)
+    tags: List = None
 
     def get_list(self, page: int = 1, limit: int = 10) -> List['Video']:
         response = get(url=f'{VIDEOS}?page={page}&limit={limit}')
@@ -81,6 +89,18 @@ class Video:
         videos = [self.from_dict(video) for video in response.json()['rows']]
 
         return videos
+
+    def get_all(self):
+        page = 1
+        limit = 10
+        videos: List['Video'] = []
+        while True:
+            videos_page = self.get_list(page=page, limit=limit)
+            videos += videos_page
+            page += 1
+
+            if len(videos_page) < limit:
+                return videos
 
     def add_tag(self, tags: List = None):
         payload = {
