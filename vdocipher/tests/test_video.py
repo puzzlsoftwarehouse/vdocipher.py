@@ -70,7 +70,7 @@ class TestVideo(BaseTest):
         [video.delete() for video in videos_to_test]
 
     def test_add_tag_to_video(self, video):
-        response = video.add_tag(['Ubuntu', 'Blender'])
+        response = video.add_tags(['Ubuntu', 'Blender'])
 
         assert response['message'] == 'Done'
 
@@ -123,7 +123,7 @@ class TestVideo(BaseTest):
     def test_repalce_tag(self, video):
         video_obj = video
 
-        video_obj.add_tag(['BLender', '3d', 'Photoshop'])
+        video_obj.add_tags(['BLender', '3d', 'Photoshop'])
 
         response = video_obj.replace_tag(['Capture-one', 'Zbrush'])
 
@@ -147,7 +147,7 @@ class TestVideo(BaseTest):
     def test_delete_tags(self, video):
         video_obj = video
 
-        video_obj.add_tag(['BLender', '3d', 'Photoshop'])
+        video_obj.add_tags(['BLender', '3d', 'Photoshop'])
 
         response = video_obj.delete_tag()
 

@@ -41,14 +41,14 @@ subtitle = vdocipher.Video(id=1).upload_subtitle('file')
 subtitle = vdocipher.Video(id=1).delete_subtitle(subtitle.id)
 
 # adding a video tag
-video = vdocipher.Video(id=1).add_tag(['Ubuntu', 'Blender'])
+video = vdocipher.Video(id=1).add_tags(['Ubuntu', 'Blender'])
 
 # adding tag in multiple videos
 vidos_id = ['xdv23rosj940fj49jfd9ajl','29fjue98lsd934hfg9']
 
 tag_list = ['Vdocipher', 'Games', 'Unity']
 
-response = self.vdocipher.Video().add_tag(videos_id=videos_id, tags=tag_list)
+response = self.vdocipher.Video().add_tags(videos_id=videos_id, tags=tag_list)
 
 # searching videos with tag
 video_list = vdocipher.Video().search_tag(tag='Unity')
