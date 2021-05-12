@@ -1,3 +1,4 @@
+
 from vdocipher import Video
 from vdocipher.tests.conftest import BaseTest
 
@@ -79,7 +80,7 @@ class TestVideo(BaseTest):
 
     def test_add_tag_to_video(self, video: Video):
         tags = ['Ubuntu', 'Blender']
-        response = video.add_tag(tags=tags)
+        response = video.add_tags(tags=tags)
 
         assert response['message'] == 'Done'
 
@@ -143,7 +144,7 @@ class TestVideo(BaseTest):
         video_obj = video
 
         video_tag = ['BLender', '3d', 'Photoshop']
-        video_obj.add_tag(video_tag)
+        video_obj.add_tags(video_tag)
 
         video_tag_replace = ['Capture-one', 'Zbrush']
         response = video_obj.replace_tag(video_tag_replace)
@@ -177,7 +178,7 @@ class TestVideo(BaseTest):
     def test_delete_tags(self, video):
         video_obj = video
 
-        video_obj.add_tag(['BLender', '3d', 'Photoshop'])
+        video_obj.add_tags(['BLender', '3d', 'Photoshop'])
 
         response = video_obj.delete_tag()
 
@@ -208,4 +209,3 @@ class TestVideo(BaseTest):
 
         assert otp.otp
         assert otp.playback_info
-

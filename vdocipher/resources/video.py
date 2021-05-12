@@ -102,7 +102,7 @@ class Video:
             if len(videos_page) < limit:
                 return videos
 
-    def add_tag(self, tags: List = None):
+    def add_tags(self, tags: List = None):
         payload = {
             "videos": [self.id],
             "tags": tags

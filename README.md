@@ -44,14 +44,14 @@ subtitle = vdocipher.Video(id=1).upload_subtitle('file')
 subtitle = vdocipher.Video(id=1).delete_subtitle(subtitle.id)
 
 # adding a video tag
-video = vdocipher.Video(id=1).add_tag(['Ubuntu', 'Blender'])
+video = vdocipher.Video(id=1).add_tags(['Ubuntu', 'Blender'])
 
 # adding tag in multiple videos
 vidos_id = ['xdv23rosj940fj49jfd9ajl','29fjue98lsd934hfg9']
 
 tag_list = ['Vdocipher', 'Games', 'Unity']
 
-response = self.vdocipher.Video().add_tag(videos_id=videos_id, tags=tag_list)
+response = self.vdocipher.Video().add_tags(videos_id=videos_id, tags=tag_list)
 
 # searching videos with tag
 video_list = vdocipher.Video().search_tag(tag='Unity')
@@ -77,12 +77,14 @@ video = vdocipher.Video().delete_tag_to_video_ids(videos_id=video_list_id)
 
 
 # obtaining OTP
+
 otp = OTP().create(videoid='your_video_id')
 
 # or
 otp = Video(title='test video').upload('file').create_otp()
 
 # opt with anotations
+
  annotate = Annotate(
             annotation_type='text' # Set type parameter as "rtext" for Dynamic watermark
             text='Name: {name}, email: {email}, IP: {ip}', # You can add user identifiable information
@@ -98,6 +100,7 @@ otp = Video(title='test video').upload('file').create_otp()
  otp = vdocipher.OTP(annotations=annotate_list).create(videoid='your_video_id')
  
  # generating OTP for offline use
+
  duration = 15 * 24 * 3600 
  rule = LicenseRules(
      can_persist=True,
