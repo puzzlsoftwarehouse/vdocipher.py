@@ -82,7 +82,16 @@ class Video:
 
         return videos
 
-    def add_tag(self, videos_id: List = None, tags: List = None):
+    def add_tag(self, tags: List = None):
+        payload = {
+            "videos": [self.id],
+            "tags": tags
+        }
+        response = post(url=f'{VIDEOS}/tags', data=json.dumps(payload))
+
+        return response.json()
+
+    def add_tag_to_video_ids(self, videos_id: List = None, tags: List = None):
         payload = {
             "videos": videos_id,
             "tags": tags
@@ -92,7 +101,7 @@ class Video:
 
         return response.json()
 
-    def search_tag(self, tag: str = None) -> List['Video']:
+    def search_by_tag(self, tag: str = None) -> List['Video']:
         querystring = {"tags": tag}
         response = get(url=VIDEOS, params=querystring)
 
@@ -105,10 +114,40 @@ class Video:
 
         return response.json()['rows']
 
-    def replace_tag(self, videos_id: List = None, tags: List = None):
+    def replace_tag(self, tags: List = None):
+        payload = {
+            "videos": [self.id],
+            "tags": tags
+        }
+
+        response = put(url=f'{VIDEOS}/tags', data=json.dumps(payload))
+
+        return response.json()
+
+    def replace_tag_to_video_ids(self, videos_id: List = None, tags: List = None):
         payload = {
             "videos": videos_id,
             "tags": tags
+        }
+
+        response = put(url=f'{VIDEOS}/tags', data=json.dumps(payload))
+
+        return response.json()
+
+    def delete_tag(self):
+        payload = {
+            "videos": [self.id],
+            "tags": []
+        }
+
+        response = put(url=f'{VIDEOS}/tags', data=json.dumps(payload))
+
+        return response.json()
+
+    def delete_tag_to_video_ids(self, videos_id: List = None):
+        payload = {
+            "videos": videos_id,
+            "tags": []
         }
 
         response = put(url=f'{VIDEOS}/tags', data=json.dumps(payload))

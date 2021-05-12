@@ -37,36 +37,40 @@ vdocipher.Video(id=1).delete()
 # adding a video subtitle
 subtitle = vdocipher.Video(id=1).upload_subtitle('file')
 
-#removing a video subtitle
+# removing a video subtitle
 subtitle = vdocipher.Video(id=1).delete_subtitle(subtitle.id)
 
 # adding a video tag
+video = vdocipher.Video(id=1).add_tag(['Ubuntu', 'Blender'])
+
+# adding tag in multiple videos
 vidos_id = ['xdv23rosj940fj49jfd9ajl','29fjue98lsd934hfg9']
 
 tag_list = ['Vdocipher', 'Games', 'Unity']
 
 response = self.vdocipher.Video().add_tag(videos_id=videos_id, tags=tag_list)
 
-#obtaining a videos with tag 
-
+# searching videos with tag
 video_list = vdocipher.Video().search_tag(tag='Unity')
 
 # obtaining all tags
 tag_list = vdocipher.Video().list_tags()
 
 # changing video tags
+video = elf.vdocipher.Video().replace_tag(['Capture-one', 'Zbrush'])
+
+# changing tag in multiple videos
 vidos_id = ['xdv23rosj940fj49jfd9ajl','29fjue98lsd934hfg9']
 
 tag_list_replace = ['Python', 'Rust', 'TypeScript']
 
 replace = vdocipher.Video().replace_tag(videos_id=video_list_id, tags=tag_list_replace)
 
-#deleteing video tags
-vidos_id = ['xdv23rosj940fj49jfd9ajl','29fjue98lsd934hfg9']
+# deleteing video tag
+video = vdocipher.Video(id=1).delete_tag()
 
-tag_list_replace = []
-
-replace = vdocipher.Video().replace_tag(videos_id=video_list_id, tags=tag_list_replace)
+# deleteingg tag in multiple videos
+video = vdocipher.Video().delete_tag_to_video_ids(videos_id=video_list_id)
 
 
 # obtaining OTP

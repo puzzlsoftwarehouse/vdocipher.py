@@ -52,7 +52,7 @@ class TestVideo(BaseTest):
 
         assert video_obj.id == video.id
         assert video_obj.title == video.title
-        assert video_obj.status == 'PRE-Upload'
+        assert video_obj.status == 'PRE-Upload' or video_obj.status == 'Queued'
 
     def test_video_get_query(self):
         videos_to_test = [self.vdocipher.Video(title=f'test-query-{i}').upload('resources/test_file.mp4') for i in
@@ -69,39 +69,50 @@ class TestVideo(BaseTest):
 
         [video.delete() for video in videos_to_test]
 
-    def test_add_tag_videos(self):
+    def test_add_tag_to_video(self, video):
+        response = video.add_tag(['Ubuntu', 'Blender'])
+
+        assert response['message'] == 'Done'
+
+    def test_add_tag_to_video_ids(self):
         video_list_id = [self.vdocipher.Video(title=f'test-tag-{i}').upload('resources/test_file.mp4').id for i in
                          range(2)]
         tag_list = ['Modelagem 3D', 'Games', 'Unity']
 
-        response = self.vdocipher.Video().add_tag(videos_id=video_list_id, tags=tag_list)
+        response = self.vdocipher.Video().add_tag_to_video_ids(videos_id=video_list_id, tags=tag_list)
 
         assert response['message'] == 'Done'
         [Video(id=video_id).delete() for video_id in video_list_id]
 
-    def test_video_get_tag(self):
+    def test_get_videos_by_tag(self):
         video_list_id = [self.vdocipher.Video(title=f'test-tag-{i}').upload('resources/test_file.mp4').id for i in
                          range(2)]
+        video_list_id_not_tag = [self.vdocipher.Video(title=f'test-tag-{i}').upload('resources/test_file.mp4').id for i
+                                 in
+                                 range(2)]
         tag_list = ['Modelagem 3D', 'Games', 'Unity']
 
-        add_tag = self.vdocipher.Video().add_tag(videos_id=video_list_id, tags=tag_list)
+        self.vdocipher.Video().add_tag_to_video_ids(videos_id=video_list_id, tags=tag_list)
 
-        videos_list = self.vdocipher.Video().search_tag(tag='Unity')
+        videos_list = self.vdocipher.Video().search_by_tag(tag='Unity')
 
         assert len(videos_list) > 0
+
+        assert len(videos_list) == len(video_list_id)
 
         [isinstance(video_obj, Video) for video_obj in videos_list]
 
         assert videos_list[0].id in video_list_id
 
         [Video(id=video_id).delete() for video_id in video_list_id]
+        [Video(id=video_id).delete() for video_id in video_list_id_not_tag]
 
     def test_get_all_tags(self):
         video_list_id = [self.vdocipher.Video(title=f'test-tag-{i}').upload('resources/test_file.mp4').id for i in
                          range(2)]
         tag_list = ['Modelagem 3D', 'Games', 'Unity']
 
-        add_tag = self.vdocipher.Video().add_tag(videos_id=video_list_id, tags=tag_list)
+        self.vdocipher.Video().add_tag_to_video_ids(videos_id=video_list_id, tags=tag_list)
 
         response = self.vdocipher.Video().list_tags()
 
@@ -109,16 +120,47 @@ class TestVideo(BaseTest):
 
         [Video(id=video_id).delete() for video_id in video_list_id]
 
-    def test_repalce_tag(self):
+    def test_repalce_tag(self, video):
+        video_obj = video
+
+        video_obj.add_tag(['BLender', '3d', 'Photoshop'])
+
+        response = video_obj.replace_tag(['Capture-one', 'Zbrush'])
+
+        assert response['message'] == 'Done'
+
+    def test_replace_tag_to_video_ids(self):
         video_list_id = [self.vdocipher.Video(title=f'test-tag-{i}').upload('resources/test_file.mp4').id for i in
                          range(2)]
         tag_list = ['Modelagem 3D', 'Games', 'Unity']
 
         tag_list_replace = ['Python', 'Rust', 'TypeScript']
 
-        add_tag = self.vdocipher.Video().add_tag(videos_id=video_list_id, tags=tag_list)
+        self.vdocipher.Video().add_tag_to_video_ids(videos_id=video_list_id, tags=tag_list)
 
-        response = self.vdocipher.Video().replace_tag(videos_id=video_list_id, tags=tag_list_replace)
+        response = self.vdocipher.Video().replace_tag_to_video_ids(videos_id=video_list_id, tags=tag_list_replace)
+
+        assert response['message'] == 'Done'
+
+        [Video(id=video_id).delete() for video_id in video_list_id]
+
+    def test_delete_tags(self, video):
+        video_obj = video
+
+        video_obj.add_tag(['BLender', '3d', 'Photoshop'])
+
+        response = video_obj.delete_tag()
+
+        assert response['message'] == 'Done'
+
+    def test_delete_tag_to_video_ids(self):
+        video_list_id = [self.vdocipher.Video(title=f'test-tag-{i}').upload('resources/test_file.mp4').id for i in
+                         range(2)]
+        tag_list = ['Modelagem 3D', 'Games', 'Unity']
+
+        self.vdocipher.Video().add_tag_to_video_ids(videos_id=video_list_id, tags=tag_list)
+
+        response = self.vdocipher.Video().delete_tag_to_video_ids(videos_id=video_list_id)
 
         assert response['message'] == 'Done'
 
