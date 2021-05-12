@@ -1,8 +1,4 @@
-from typing import IO, List
-
 import requests
-from requests.structures import CaseInsensitiveDict
-from requests_toolbelt import MultipartEncoder
 
 API_SECRET = ''
 
@@ -18,7 +14,7 @@ def authenticate(api_secret: str):
 def fetch_json(
         url: str,
         http_method: str = "GET",
-        data=None,
+        data: dict = None,
         params=None,
         headers=None,
         use_api_secret: bool = True
@@ -60,7 +56,6 @@ def post(url: str,
          headers: dict = None,
          use_api_secret: bool = True
          ):
-
     response = fetch_json(url=url,
                           http_method="POST",
                           data=data,
@@ -71,13 +66,13 @@ def post(url: str,
     return response
 
 
-def put(url: str, data: dict = None, params: dict = None):
+def put(url: str, data=None, params: dict = None):
     response = fetch_json(url=url, http_method="PUT", data=data, params=params)
 
     return response
 
 
-def delete(url: str, data: dict = None, params: dict = None):
+def delete(url: str, data=None, params: dict = None):
     response = fetch_json(url=url, http_method="DELETE", data=data, params=params)
 
     return response

@@ -1,4 +1,4 @@
-from datetime import datetime
+import json
 from typing import List, IO
 
 from dataclasses import dataclass, field
@@ -82,6 +82,78 @@ class Video:
 
         return videos
 
+    def add_tags(self, tags: List[str] = None):
+        payload = {
+            "videos": [self.id],
+            "tags": tags
+        }
+        response = post(url=f'{VIDEOS}/tags', data=json.dumps(payload))
+
+        return response.json()
+
+    def add_tag_to_video_ids(self, videos_id: List = None, tags: List = None):
+        payload = {
+            "videos": videos_id,
+            "tags": tags
+        }
+
+        response = post(url=f'{VIDEOS}/tags', data=json.dumps(payload))
+
+        return response.json()
+
+    def search_by_tag(self, tag: str = None) -> List['Video']:
+        querystring = {"tags": tag}
+        response = get(url=VIDEOS, params=querystring)
+
+        videos = [self.from_dict(video) for video in response.json()['rows']]
+
+        return videos
+
+    def list_tags(self):
+        response = get(url=f'{VIDEOS}/tags')
+
+        return response.json()['rows']
+
+    def replace_tag(self, tags: List = None):
+        payload = {
+            "videos": [self.id],
+            "tags": tags
+        }
+
+        response = put(url=f'{VIDEOS}/tags', data=json.dumps(payload))
+
+        return response.json()
+
+    def replace_tag_to_video_ids(self, videos_id: List = None, tags: List = None):
+        payload = {
+            "videos": videos_id,
+            "tags": tags
+        }
+
+        response = put(url=f'{VIDEOS}/tags', data=json.dumps(payload))
+
+        return response.json()
+
+    def delete_tag(self):
+        payload = {
+            "videos": [self.id],
+            "tags": []
+        }
+
+        response = put(url=f'{VIDEOS}/tags', data=json.dumps(payload))
+
+        return response.json()
+
+    def delete_tag_to_video_ids(self, videos_id: List = None):
+        payload = {
+            "videos": videos_id,
+            "tags": []
+        }
+
+        response = put(url=f'{VIDEOS}/tags', data=json.dumps(payload))
+
+        return response.json()
+
     def create_upload_credentials(self) -> UploadCredentials:
         response = UploadCredentials().create(self.title)
 
@@ -93,7 +165,6 @@ class Video:
         return otp
 
     def upload(self, file: IO) -> 'Video':
-
         credentials = self.create_upload_credentials()
 
         data = MultipartEncoder(fields=[
@@ -123,7 +194,6 @@ class Video:
     def upload_subtitle(self,
                         subtitle_file: IO,
                         language: str = 'en') -> Subtitle:
-
         querystring = {'language': language}
 
         data = MultipartEncoder(fields=[
@@ -137,6 +207,11 @@ class Video:
 
         return Subtitle.from_dict(response.json())
 
+    def delete_subtitle(self, file_id: str = None):
+        response = delete(url=f'{VIDEOS}/{self.id}/files/{file_id}')
+
+        return response.json()
+
     def delete(self):
         querystring = {'videos': f"{self.id}"}
 
@@ -145,3 +220,10 @@ class Video:
             params=querystring
         )
         return response
+
+    def _delete_all(self):
+        list_videos = self.get_list(page=1, limit=4)
+
+        [video.delete() for video in list_videos]
+
+        return 'All videos deleted'
