@@ -1,6 +1,6 @@
 import json
 from typing import List, IO
-
+import pathlib
 from dataclasses import dataclass, field
 from dataclasses_json import dataclass_json, config
 from requests_toolbelt import MultipartEncoder
@@ -8,7 +8,7 @@ from requests_toolbelt import MultipartEncoder
 from vdocipher.resources.ip_geo_rule import IPGeoRule
 from vdocipher.resources.otp import OTP
 from vdocipher.resources.request import get, put, post, delete
-from vdocipher.resources.routes.base import VIDEOS
+from vdocipher.resources.routes.base import VIDEOS, BASE_URL
 
 
 @dataclass_json
@@ -174,7 +174,22 @@ class Video:
 
         return response.json()
 
-    def delete_tag(self):
+    def delete_tag(self, tag: str):
+
+        tags_video = self.get().tags
+        tags_video.remove(tag)
+
+
+        payload = {
+            "videos": [self.id],
+            "tags": tags_video
+        }
+
+        response = put(url=f'{VIDEOS}/tags', data=json.dumps(payload))
+
+        return response.json()
+
+    def delete_all_tags(self):
         payload = {
             "videos": [self.id],
             "tags": []
@@ -184,7 +199,7 @@ class Video:
 
         return response.json()
 
-    def delete_tag_to_video_ids(self, videos_id: List = None):
+    def delete_all_tag_to_video_ids(self, videos_id: List = None):
         payload = {
             "videos": videos_id,
             "tags": []
@@ -261,15 +276,36 @@ class Video:
         )
         return response
 
+    def list_all_files(self) -> List[VideoFiles]:
+
+        response = get(url=f'{VIDEOS}/{self.id}/files/')
+        files = [VideoFiles.from_dict(files) for files in response.json()]
+        return files
+
+    def upload_poster(self, file: IO):
+        extension = pathlib.Path(file.name).suffix.replace('.', '')
+        if not extension in ['png', 'jpeg']:
+            raise Exception(f'Invalid image extension={extension}')
+
+        data = MultipartEncoder(fields=[
+            ('file', ('filename', file, f'image/{extension}'))
+        ])
+        response = post(
+            url=f'{VIDEOS}/{self.id}/files',
+            data=data,
+            headers={'Content-Type': data.content_type},
+        )
+
+        return response.json()
+
+    def get_url_posters(self) -> List:
+        response = get(url=f'{BASE_URL}/meta/{self.id}')
+
+        return response.json()['posters']
+
     def _delete_all(self):
         list_videos = self.get_all()
 
         [video.delete() for video in list_videos]
 
         return 'All videos deleted'
-
-    def list_all_files(self) -> List[VideoFiles]:
-
-        response = get(url=f'{VIDEOS}/{self.id}/files/')
-        files = [VideoFiles.from_dict(files) for files in response.json()]
-        return files

@@ -175,24 +175,34 @@ class TestVideo(BaseTest):
 
         [Video(id=video_id).delete() for video_id in video_list_id]
 
-    def test_delete_tags(self, video):
+    def test_delete_tag(self, video: Video):
         video_obj = video
 
         video_obj.add_tags(['BLender', '3d', 'Photoshop'])
 
-        response = video_obj.delete_tag()
+        response = video_obj.delete_tag('3d')
+
+        assert response['message'] == 'Done'
+        assert not '3d' in video_obj.get().tags
+
+    def test_delete_all_tags(self, video):
+        video_obj = video
+
+        video_obj.add_tags(['BLender', '3d', 'Photoshop'])
+
+        response = video_obj.delete_all_tags()
 
         assert response['message'] == 'Done'
         assert not (set(video_obj.get().tags).intersection(set([])))
 
-    def test_delete_tag_to_video_ids(self):
+    def test_delete_all_tag_to_video_ids(self):
         video_list_id = [self.vdocipher.Video(title=f'test-tag-{i}').upload('resources/test_file.mp4').id for i in
                          range(2)]
         tag_list = ['Modelagem 3D', 'Games', 'Unity']
 
         self.vdocipher.Video().add_tag_to_video_ids(videos_id=video_list_id, tags=tag_list)
 
-        response = self.vdocipher.Video().delete_tag_to_video_ids(videos_id=video_list_id)
+        response = self.vdocipher.Video().delete_all_tag_to_video_ids(videos_id=video_list_id)
 
         assert response['message'] == 'Done'
 
@@ -223,3 +233,19 @@ class TestVideo(BaseTest):
         response = video.list_all_files()
         assert len(response) > 0
 
+    def test_upload_post(self, video: Video):
+
+        with open('resources/test_poster.png', 'rb') as file:
+            video.upload_poster(file=file)
+
+        video_obj = video.get()
+
+        assert video_obj.poster
+        assert len(video_obj.posters) > 0
+
+    def test_get_url_posters(self, video: Video):
+        with open('resources/test_poster.png', 'rb') as file:
+            video.upload_poster(file=file)
+
+        posters = video.get_url_posters()
+        assert len(posters) > 0

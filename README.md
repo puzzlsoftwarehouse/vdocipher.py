@@ -70,14 +70,22 @@ tag_list_replace = ['Python', 'Rust', 'TypeScript']
 replace = vdocipher.Video().replace_tag(videos_id=video_list_id, tags=tag_list_replace)
 
 # deleteing video tag
-video = vdocipher.Video(id=1).delete_tag()
+video = vdocipher.Video(id=1).delete_tag('JavaScript')
 
-# deleteingg tag in multiple videos
+# deleteing video all tags
+video = vdocipher.Video(id=1).delete_all_tags()
+
+# deleteingg all tags in multiple videos
 video = vdocipher.Video().delete_tag_to_video_ids(videos_id=video_list_id)
 
 # List all files of a video including captions and posters
 video = vdocipher.Video().list_all_files()
 
+# adding a video poster
+poster = vdocipher.Video(id=1).upload_poster('file')
+
+# # obtaining post url
+poster_url = vdocipher.Video(id=1).get_url_posters()
 # obtaining OTP
 
 otp = OTP().create(videoid='your_video_id')
