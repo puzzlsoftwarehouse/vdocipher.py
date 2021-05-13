@@ -1,5 +1,5 @@
-
 from vdocipher import Video
+from vdocipher.resources.video import Subtitle
 from vdocipher.tests.conftest import BaseTest
 
 
@@ -209,3 +209,17 @@ class TestVideo(BaseTest):
 
         assert otp.otp
         assert otp.playback_info
+
+    def test_list_all_files(self, video):
+
+        with open('resources/test_caption.vtt', 'rb') as subtitle_file:
+            subtitle: Subtitle = video.upload_subtitle(subtitle_file, language='en')
+
+            assert subtitle.id
+            assert subtitle.size
+            assert subtitle.time
+            assert subtitle.lang
+
+        response = video.list_all_files()
+        assert len(response) > 0
+

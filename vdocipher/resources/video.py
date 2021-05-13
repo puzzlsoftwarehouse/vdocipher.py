@@ -55,6 +55,26 @@ class Subtitle:
 
 @dataclass_json
 @dataclass
+class VideoFiles:
+    is_downloadable: bool = field(metadata=config(field_name="isDownloadable"), default=None)
+    is_deletable: bool = field(metadata=config(field_name="isDeletable"), default=None)
+    id: int = None
+    name: str = None
+    size: int = None
+    time: str = None
+    enabled: int = None
+    format: str = None
+    video_codec: str = None
+    audio_codec: str = None
+    height: int = None
+    width: int = None
+    bitrate: str = None
+    encryption_type: str = None
+    lang: str = None
+
+
+@dataclass_json
+@dataclass
 class Video:
     id: str = None
     title: str = None
@@ -242,8 +262,14 @@ class Video:
         return response
 
     def _delete_all(self):
-        list_videos = self.get_list(page=1, limit=4)
+        list_videos = self.get_all()
 
         [video.delete() for video in list_videos]
 
         return 'All videos deleted'
+
+    def list_all_files(self) -> List[VideoFiles]:
+
+        response = get(url=f'{VIDEOS}/{self.id}/files/')
+        files = [VideoFiles.from_dict(files) for files in response.json()]
+        return files

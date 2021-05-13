@@ -75,6 +75,8 @@ video = vdocipher.Video(id=1).delete_tag()
 # deleteingg tag in multiple videos
 video = vdocipher.Video().delete_tag_to_video_ids(videos_id=video_list_id)
 
+# List all files of a video including captions and posters
+video = vdocipher.Video().list_all_files()
 
 # obtaining OTP
 
