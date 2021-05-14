@@ -313,7 +313,7 @@ class Video:
 
         return response.json()['posters']
 
-    def bandwidth(self, date_filter: date = None):
+    def bandwidth(self, date_filter: date = None) -> VideoBandwidth:
 
         bandwith = VideoBandwidth().get_by_video_id(self.id, date_filter)
         return bandwith
