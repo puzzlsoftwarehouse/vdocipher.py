@@ -1,4 +1,5 @@
 import json
+from datetime import date
 from typing import List, IO
 import pathlib
 from dataclasses import dataclass, field
@@ -309,6 +310,16 @@ class Video:
         response = get(url=f'{BASE_URL}/meta/{self.id}')
 
         return response.json()['posters']
+
+    def bandwidth(self, date_filter: date = None):
+
+        data = json.dumps({
+            "date": date_filter.strftime('%Y-%m-%d')
+        })
+
+        response = post(url=f'{BASE_URL}/account/video-usage', data=data)
+
+        return response
 
     def _delete_all(self):
         list_videos = self.get_all()
