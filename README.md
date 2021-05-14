@@ -28,6 +28,9 @@ videos = vdocipher.Video().get_all()
 # uploading a video
 new_video = vdocipher.Video(title='title').upload('file')
 
+# uploading a video from HTTP(s)/FTP urls
+new_video = .vdocipher.Video().upload_by_url('url_video')
+
 # obtaining a video
 video = vdocipher.Video(id=1).get()
 

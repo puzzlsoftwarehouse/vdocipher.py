@@ -50,6 +50,14 @@ class TestVideo(BaseTest):
         assert isinstance(video, Video)
         assert video.id
 
+    def test_upload_by_url(self):
+        response = self.vdocipher.Video().upload_by_url(
+            'https://instagram.fthe11-1.fna.fbcdn.net/v/t50.2886-16/179158289_4317944001571515_5690961565767437429_n.mp4?_nc_ht=instagram.fthe11-1.fna.fbcdn.net&_nc_cat=103&_nc_ohc=dH-FDZ1QSJ8AX8oukVC&edm=AP_V10EBAAAA&ccb=7-4&oe=60A0B2FC&oh=a44759fa9467621b57c09af7dc2fa703&_nc_sid=4f375e')
+
+        assert response
+        assert isinstance(response, Video)
+        self.vdocipher.Video(response.id).delete()
+
     def test_video_delete(self, video):
         response = video.delete()
 
@@ -249,3 +257,4 @@ class TestVideo(BaseTest):
 
         posters = video.get_url_posters()
         assert len(posters) > 0
+

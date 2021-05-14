@@ -179,7 +179,6 @@ class Video:
         tags_video = self.get().tags
         tags_video.remove(tag)
 
-
         payload = {
             "videos": [self.id],
             "tags": tags_video
@@ -245,6 +244,14 @@ class Video:
             self.id = credentials.video_id
 
             return self
+
+    def upload_by_url(self, url: str = None) -> 'Video':
+
+        payload = json.dumps({"url": url})
+
+        response = put(url=f'{VIDEOS}/importUrl', data=payload)
+
+        return self.from_dict(response.json())
 
     def upload_subtitle(self,
                         subtitle_file: IO,
