@@ -1,3 +1,4 @@
+import csv
 import json
 from datetime import date
 from typing import List, IO
@@ -6,6 +7,7 @@ from dataclasses import dataclass, field
 from dataclasses_json import dataclass_json, config
 from requests_toolbelt import MultipartEncoder
 
+from vdocipher.resources.bandwith import VideoBandwidth
 from vdocipher.resources.ip_geo_rule import IPGeoRule
 from vdocipher.resources.otp import OTP
 from vdocipher.resources.request import get, put, post, delete
@@ -313,13 +315,8 @@ class Video:
 
     def bandwidth(self, date_filter: date = None):
 
-        data = json.dumps({
-            "date": date_filter.strftime('%Y-%m-%d')
-        })
-
-        response = post(url=f'{BASE_URL}/account/video-usage', data=data)
-
-        return response
+        bandwith = VideoBandwidth().get_by_video_id(self.id, date_filter)
+        return bandwith
 
     def _delete_all(self):
         list_videos = self.get_all()

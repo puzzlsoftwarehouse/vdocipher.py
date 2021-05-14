@@ -1,6 +1,6 @@
 from datetime import datetime, date
 
-from vdocipher import Video
+from vdocipher import Video, VideoBandwidth
 from vdocipher.resources.video import Subtitle
 from vdocipher.tests.conftest import BaseTest
 
@@ -260,9 +260,11 @@ class TestVideo(BaseTest):
         posters = video.get_url_posters()
         assert len(posters) > 0
 
-    def test_get_bandwidth(self):
-        video_obj = self.vdocipher.Video(id='1e3ded732fcff3ffe44134a97b415078').get()
+    def test_get_bandwidth_by_video_id(self):
+        video_obj = self.vdocipher.Video(id='bf9ae268cb5601e4cf5d1640c44f92d7').get()
         date_filter = date(year=2021, month=5, day=13)
-        response = video_obj.bandwidth(date_filter)
+        video_bandwidth = video_obj.bandwidth(date_filter)
 
-        assert response
+        assert isinstance(video_bandwidth, VideoBandwidth)
+
+        assert video_bandwidth.video_id == video_obj.id
