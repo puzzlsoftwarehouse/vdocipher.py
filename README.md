@@ -89,15 +89,14 @@ poster = vdocipher.Video(id=1).upload_poster('file')
 
 # # obtaining post url
 poster_url = vdocipher.Video(id=1).get_url_posters()
-# obtaining OTP
 
+# obtaining OTP
 otp = OTP().create(videoid='your_video_id')
 
 # or
 otp = Video(title='test video').upload('file').create_otp()
 
 # opt with anotations
-
  annotate = Annotate(
             annotation_type='text' # Set type parameter as "rtext" for Dynamic watermark
             text='Name: {name}, email: {email}, IP: {ip}', # You can add user identifiable information
@@ -136,7 +135,16 @@ otp = Video(title='test video').upload('file').create_otp()
  geo_rule_list = [geo_rule]
  otp = vdocipher.OTP(ip_geo_rule=geo_rules_list).create(videoid='your_video_id')
  
+ # obtaining video bandwidth
+ video_obj = vdocipher.Video().get()
+ date_filter = date(year=2021, month=5, day=13)
  
+ video_bandwidth = video_obj.bandwidth(date_filter)
+ 
+ # obtaining all video bandwidth
+  date_filter = date(year=2021, month=5, day=13)
+  bandwidth = vdocipher.VideoBandwidth()
+  list_video_bandwidth = bandwidth.get(date_filter=date_filter)
 
 ```
 
