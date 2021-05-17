@@ -1,4 +1,3 @@
-import csv
 import json
 from datetime import date
 from typing import List, IO
@@ -90,8 +89,9 @@ class Video:
     ip_geo_rules: List[IPGeoRule] = field(metadata=config(field_name="ipGeoRules"), default=None)
     posters: List = None
     poster: str = None
-    total_sinze_bytes: int = field(metadata=config(field_name="totalSinzeBytes"), default=None)
+    total_size_bytes: int = field(metadata=config(field_name="totalSinzeBytes"), default=None)
     tags: List = None
+    bandwidth: str = None
 
     def get_list(self, page: int = 1, limit: int = 10) -> List['Video']:
         response = get(url=f'{VIDEOS}?page={page}&limit={limit}')
@@ -152,7 +152,7 @@ class Video:
 
         return videos
 
-    def list_tags(self):
+    def get_tags(self):
         response = get(url=f'{VIDEOS}/tags')
 
         return response.json()['rows']
@@ -201,7 +201,16 @@ class Video:
 
         return response.json()
 
-    def delete_all_tag_to_video_ids(self, videos_id: List = None):
+    def delete_tag_by_video_ids(self, videos_id: List = None, tag: str = None):
+        id_obj = self.id
+        for video_id in videos_id:
+            self.id = video_id
+            self.delete_tag(tag)
+
+        self.id = id_obj
+        return 'Tag deleted of all videos'
+
+    def delete_all_tag_by_video_ids(self, videos_id: List = None):
         payload = {
             "videos": videos_id,
             "tags": []
@@ -286,7 +295,7 @@ class Video:
         )
         return response
 
-    def list_all_files(self) -> List[VideoFiles]:
+    def get_all_files(self) -> List[VideoFiles]:
 
         response = get(url=f'{VIDEOS}/{self.id}/files/')
         files = [VideoFiles.from_dict(files) for files in response.json()]
@@ -313,7 +322,7 @@ class Video:
 
         return response.json()['posters']
 
-    def bandwidth(self, date_filter: date = None) -> VideoBandwidth:
+    def get_bandwidth(self, date_filter: date = None) -> VideoBandwidth:
 
         bandwith = VideoBandwidth().get_by_video_id(self.id, date_filter)
         return bandwith

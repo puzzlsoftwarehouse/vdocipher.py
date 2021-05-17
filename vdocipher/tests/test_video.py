@@ -1,7 +1,5 @@
 from datetime import datetime, date
-
 from vdocipher import Video, VideoBandwidth
-from vdocipher.resources.video import Subtitle
 from vdocipher.tests.conftest import BaseTest
 
 
@@ -27,12 +25,17 @@ class TestVideo(BaseTest):
 
         [video.delete() for video in video_list]
 
-    def test_video_get_all_video(self, video: Video):
+    def test_video_get_all_videos(self):
+
+        video_list = [self.vdocipher.Video(title=f'test {i}').upload('resources/test_file.mp4') for i in range(4)]
+
         videos = self.vdocipher.Video().get_all()
 
-        assert len(videos) > 0
+        assert len(videos) == 4
 
-        [isinstance(video_obj, Video) for video_obj in videos[:5]]
+        [isinstance(video_obj, Video) for video_obj in videos]
+
+        [video.delete() for video in video_list]
 
     def test_video_upload_credentials(self):
         upload_credentials = self.vdocipher.UploadCredentials().create(title='test')
@@ -54,7 +57,7 @@ class TestVideo(BaseTest):
 
     def test_upload_by_url(self):
         response = self.vdocipher.Video().upload_by_url(
-            'https://instagram.fthe11-1.fna.fbcdn.net/v/t50.2886-16/179158289_4317944001571515_5690961565767437429_n.mp4?_nc_ht=instagram.fthe11-1.fna.fbcdn.net&_nc_cat=103&_nc_ohc=dH-FDZ1QSJ8AX8oukVC&edm=AP_V10EBAAAA&ccb=7-4&oe=60A0B2FC&oh=a44759fa9467621b57c09af7dc2fa703&_nc_sid=4f375e')
+            'https://www.youtube.com/watch?v=jNQXAC9IVRw')
 
         assert response
         assert isinstance(response, Video)
@@ -96,7 +99,7 @@ class TestVideo(BaseTest):
 
         assert set(video.get().tags).intersection(set(tags))
 
-    def test_add_tag_to_video_ids(self):
+    def test_add_tag_by_video_ids(self):
         video_list_id = [self.vdocipher.Video(title=f'test-tag-{i}').upload('resources/test_file.mp4').id for i in
                          range(2)]
         tag_list = ['Modelagem 3D', 'Games', 'Unity', 'Godot']
@@ -144,13 +147,13 @@ class TestVideo(BaseTest):
 
         self.vdocipher.Video().add_tag_to_video_ids(videos_id=video_list_id, tags=tag_list)
 
-        response = self.vdocipher.Video().list_tags()
+        response = self.vdocipher.Video().get_tags()
 
         assert len(response) > 0
 
         [Video(id=video_id).delete() for video_id in video_list_id]
 
-    def test_repalce_tag(self, video):
+    def test_replace_tag(self, video):
         video_obj = video
 
         video_tag = ['BLender', '3d', 'Photoshop']
@@ -203,7 +206,7 @@ class TestVideo(BaseTest):
         response = video_obj.delete_all_tags()
 
         assert response['message'] == 'Done'
-        assert not (set(video_obj.get().tags).intersection(set([])))
+        assert len(video_obj.get().tags) == 0
 
     def test_delete_all_tag_to_video_ids(self):
         video_list_id = [self.vdocipher.Video(title=f'test-tag-{i}').upload('resources/test_file.mp4').id for i in
@@ -212,15 +215,32 @@ class TestVideo(BaseTest):
 
         self.vdocipher.Video().add_tag_to_video_ids(videos_id=video_list_id, tags=tag_list)
 
-        response = self.vdocipher.Video().delete_all_tag_to_video_ids(videos_id=video_list_id)
+        response = self.vdocipher.Video().delete_all_tag_by_video_ids(videos_id=video_list_id)
 
         assert response['message'] == 'Done'
 
         for video_id in video_list_id:
             tag_video = self.vdocipher.Video(id=video_id).get().tags
-            tag_video_set = set(tag_video)
+            assert len(tag_video) == 0
 
-            assert not tag_video_set.intersection([])
+        [Video(id=video_id).delete() for video_id in video_list_id]
+
+    def test_delete_tag_to_video_ids(self):
+        video_list_id = [self.vdocipher.Video(title=f'test-tag-{i}').upload('resources/test_file.mp4').id for i in
+                         range(2)]
+        tag_list = ['Modelagem 3D', 'Unity', 'PythonJS']
+
+        self.vdocipher.Video().add_tag_to_video_ids(videos_id=video_list_id, tags=tag_list)
+
+        video_test = self.vdocipher.Video(id=video_list_id[0]).get().tags
+
+        response = self.vdocipher.Video().delete_tag_by_video_ids(videos_id=video_list_id, tag='PythonJS')
+
+        assert response == 'Tag deleted of all videos'
+
+        for video_id in video_list_id:
+            tag_video = self.vdocipher.Video(id=video_id).get().tags
+            assert 'PythonJS' not in tag_video
 
         [Video(id=video_id).delete() for video_id in video_list_id]
 
@@ -233,17 +253,15 @@ class TestVideo(BaseTest):
     def test_list_all_files(self, video):
 
         with open('resources/test_caption.vtt', 'rb') as subtitle_file:
-            subtitle: Subtitle = video.upload_subtitle(subtitle_file, language='en')
+            video.upload_subtitle(subtitle_file, language='en')
 
-            assert subtitle.id
-            assert subtitle.size
-            assert subtitle.time
-            assert subtitle.lang
+        with open('resources/test_poster.png', 'rb') as file:
+            video.upload_poster(file=file)
 
-        response = video.list_all_files()
-        assert len(response) > 0
+        response = video.get_all_files()
+        assert len(response) == 5
 
-    def test_upload_post(self, video: Video):
+    def test_upload_poster(self, video: Video):
 
         with open('resources/test_poster.png', 'rb') as file:
             video.upload_poster(file=file)
@@ -263,8 +281,11 @@ class TestVideo(BaseTest):
     def test_get_bandwidth_by_video_id(self):
         video_obj = self.vdocipher.Video(id='bf9ae268cb5601e4cf5d1640c44f92d7').get()
         date_filter = date(year=2021, month=5, day=13)
-        video_bandwidth = video_obj.bandwidth(date_filter)
+        video_bandwidth = video_obj.get_bandwidth(date_filter)
 
         assert isinstance(video_bandwidth, VideoBandwidth)
 
         assert video_bandwidth.video_id == video_obj.id
+
+    def test_delete(self):
+        self.vdocipher.Video()._delete_all()

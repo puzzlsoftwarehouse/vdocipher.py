@@ -72,13 +72,16 @@ tag_list_replace = ['Python', 'Rust', 'TypeScript']
 
 replace = vdocipher.Video().replace_tag(videos_id=video_list_id, tags=tag_list_replace)
 
-# deleteing video tag
+# deleting video tag
 video = vdocipher.Video(id=1).delete_tag('JavaScript')
 
-# deleteing video all tags
+# deleting all video tags
 video = vdocipher.Video(id=1).delete_all_tags()
 
-# deleteingg all tags in multiple videos
+# deleting a tags in multiple videos
+vdocipher.Video().delete_tag_by_video_ids(videos_id=video_list_id, tag='PythonJS')
+
+# deleting all tags in multiple videos
 video = vdocipher.Video().delete_tag_to_video_ids(videos_id=video_list_id)
 
 # List all files of a video including captions and posters
@@ -87,7 +90,7 @@ video = vdocipher.Video().list_all_files()
 # adding a video poster
 poster = vdocipher.Video(id=1).upload_poster('file')
 
-# # obtaining post url
+# obtaining post url
 poster_url = vdocipher.Video(id=1).get_url_posters()
 
 # obtaining OTP
@@ -138,13 +141,18 @@ otp = Video(title='test video').upload('file').create_otp()
  # obtaining video bandwidth
  video_obj = vdocipher.Video().get()
  date_filter = date(year=2021, month=5, day=13)
- 
  video_bandwidth = video_obj.bandwidth(date_filter)
  
  # obtaining all video bandwidth
-  date_filter = date(year=2021, month=5, day=13)
+ date_filter = date(year=2021, month=5, day=13)
+ bandwidth = vdocipher.VideoBandwidth()
+ list_video_bandwidth = bandwidth.get(date_filter=date_filter)
+ 
+ # obtaining video from bandwidth
   bandwidth = vdocipher.VideoBandwidth()
-  list_video_bandwidth = bandwidth.get(date_filter=date_filter)
+  video_bandwidth = bandwidth.get(date_filter)[0]
+  video = video_bandwidth.video
+ 
 
 ```
 
