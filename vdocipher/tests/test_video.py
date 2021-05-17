@@ -232,8 +232,6 @@ class TestVideo(BaseTest):
 
         self.vdocipher.Video().add_tag_to_video_ids(videos_id=video_list_id, tags=tag_list)
 
-        video_test = self.vdocipher.Video(id=video_list_id[0]).get().tags
-
         response = self.vdocipher.Video().delete_tag_by_video_ids(videos_id=video_list_id, tag='PythonJS')
 
         assert response == 'Tag deleted of all videos'
@@ -287,5 +285,3 @@ class TestVideo(BaseTest):
 
         assert video_bandwidth.video_id == video_obj.id
 
-    def test_delete(self):
-        self.vdocipher.Video()._delete_all()
