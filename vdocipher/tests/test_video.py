@@ -13,10 +13,10 @@ class TestVideo(BaseTest):
         [isinstance(video_obj, Video) for video_obj in videos[:5]]
 
     def test_video_get_list_pagination(self):
-        video_list = [self.vdocipher.Video(title=f'test {i}').upload('resources/test_file.mp4') for i in range(3)]
+        video_list = [self.vdocipher.Video(title=f'test {i}').upload('resources/test_file.mp4') for i in range(2)]
 
         number_page = 1
-        page_limit = 2
+        page_limit = 1
 
         videos = self.vdocipher.Video().get_list(number_page, page_limit)
 
@@ -27,11 +27,11 @@ class TestVideo(BaseTest):
 
     def test_video_get_all_videos(self):
 
-        video_list = [self.vdocipher.Video(title=f'test {i}').upload('resources/test_file.mp4') for i in range(4)]
+        video_list = [self.vdocipher.Video(title=f'test {i}').upload('resources/test_file.mp4') for i in range(2)]
 
         videos = self.vdocipher.Video().get_all()
 
-        assert len(videos) == 4
+        assert len(videos) == 2
 
         [isinstance(video_obj, Video) for video_obj in videos]
 
@@ -78,9 +78,9 @@ class TestVideo(BaseTest):
 
     def test_video_get_query(self):
         videos_to_test = [self.vdocipher.Video(title=f'test-query-{i}').upload('resources/test_file.mp4') for i in
-                          range(3)]
+                          range(2)]
 
-        query_test = 'test-query-2'
+        query_test = 'test-query-1'
         videos_list = self.vdocipher.Video().query(query=query_test)
 
         assert len(videos_list) > 0
@@ -119,10 +119,10 @@ class TestVideo(BaseTest):
 
     def test_get_videos_by_tag(self):
         video_list_id = [self.vdocipher.Video(title=f'test-tag-{i}').upload('resources/test_file.mp4').id for i in
-                         range(2)]
+                         range(1)]
         video_list_id_not_tag = [self.vdocipher.Video(title=f'test-tag-{i}').upload('resources/test_file.mp4').id for i
                                  in
-                                 range(2)]
+                                 range(1)]
         tag_list = ['Modelagem 3D', 'Games', 'Unity']
 
         self.vdocipher.Video().add_tag_to_video_ids(video_ids=video_list_id, tags=tag_list)
@@ -284,4 +284,3 @@ class TestVideo(BaseTest):
     #     assert isinstance(video_bandwidth, VideoBandwidth)
     #
     #     assert video_bandwidth.video_id == video_obj.id
-
