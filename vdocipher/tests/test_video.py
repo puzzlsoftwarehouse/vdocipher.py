@@ -104,7 +104,7 @@ class TestVideo(BaseTest):
                          range(2)]
         tag_list = ['Modelagem 3D', 'Games', 'Unity', 'Godot']
 
-        response = self.vdocipher.Video().add_tag_to_video_ids(videos_ids=video_list_id, tags=tag_list)
+        response = self.vdocipher.Video().add_tag_to_video_ids(video_ids=video_list_id, tags=tag_list)
 
         assert response['message'] == 'Done'
 
@@ -125,7 +125,7 @@ class TestVideo(BaseTest):
                                  range(2)]
         tag_list = ['Modelagem 3D', 'Games', 'Unity']
 
-        self.vdocipher.Video().add_tag_to_video_ids(videos_ids=video_list_id, tags=tag_list)
+        self.vdocipher.Video().add_tag_to_video_ids(video_ids=video_list_id, tags=tag_list)
 
         videos_list = self.vdocipher.Video().search_by_tag(tag='Unity')
 
@@ -145,7 +145,7 @@ class TestVideo(BaseTest):
                          range(2)]
         tag_list = ['Modelagem 3D', 'Games', 'Unity']
 
-        self.vdocipher.Video().add_tag_to_video_ids(videos_ids=video_list_id, tags=tag_list)
+        self.vdocipher.Video().add_tag_to_video_ids(video_ids=video_list_id, tags=tag_list)
 
         response = self.vdocipher.Video().get_tags()
 
@@ -173,9 +173,9 @@ class TestVideo(BaseTest):
 
         tag_list_replace = ['Python', 'Rust', 'TypeScript']
 
-        self.vdocipher.Video().add_tag_to_video_ids(videos_ids=video_list_id, tags=tag_list)
+        self.vdocipher.Video().add_tag_to_video_ids(video_ids=video_list_id, tags=tag_list)
 
-        response = self.vdocipher.Video().replace_tag_to_video_ids(videos_ids=video_list_id, tags=tag_list_replace)
+        response = self.vdocipher.Video().replace_tag_to_video_ids(video_ids=video_list_id, tags=tag_list_replace)
 
         assert response['message'] == 'Done'
 
@@ -213,9 +213,9 @@ class TestVideo(BaseTest):
                          range(2)]
         tag_list = ['Modelagem 3D', 'Games', 'Unity']
 
-        self.vdocipher.Video().add_tag_to_video_ids(videos_ids=video_list_id, tags=tag_list)
+        self.vdocipher.Video().add_tag_to_video_ids(video_ids=video_list_id, tags=tag_list)
 
-        response = self.vdocipher.Video().delete_all_tag_by_video_ids(videos_ids=video_list_id)
+        response = self.vdocipher.Video().delete_all_tag_by_video_ids(video_ids=video_list_id)
 
         assert response['message'] == 'Done'
 
@@ -230,9 +230,9 @@ class TestVideo(BaseTest):
                          range(2)]
         tag_list = ['Modelagem 3D', 'Unity', 'PythonJS']
 
-        self.vdocipher.Video().add_tag_to_video_ids(videos_ids=video_list_id, tags=tag_list)
+        self.vdocipher.Video().add_tag_to_video_ids(video_ids=video_list_id, tags=tag_list)
 
-        response = self.vdocipher.Video().delete_tag_by_video_ids(videos_ids=video_list_id, tag='PythonJS')
+        response = self.vdocipher.Video().delete_tag_by_video_ids(video_ids=video_list_id, tag='PythonJS')
 
         assert response == 'Tag deleted of all videos'
 
