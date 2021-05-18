@@ -6,7 +6,7 @@ from dataclasses import dataclass, field
 from dataclasses_json import dataclass_json, config
 from requests_toolbelt import MultipartEncoder
 
-from vdocipher.resources.bandwith import VideoBandwidth
+from vdocipher.resources.bandwidth import VideoBandwidth
 from vdocipher.resources.ip_geo_rule import IPGeoRule
 from vdocipher.resources.otp import OTP
 from vdocipher.resources.request import get, put, post, delete
@@ -134,9 +134,9 @@ class Video:
 
         return response.json()
 
-    def add_tag_to_video_ids(self, videos_id: List = None, tags: List = None):
+    def add_tag_to_video_ids(self, videos_ids: List = None, tags: List = None):
         payload = {
-            "videos": videos_id,
+            "videos": videos_ids,
             "tags": tags
         }
 
@@ -167,9 +167,9 @@ class Video:
 
         return response.json()
 
-    def replace_tag_to_video_ids(self, videos_id: List = None, tags: List = None):
+    def replace_tag_to_video_ids(self, videos_ids: List = None, tags: List = None):
         payload = {
-            "videos": videos_id,
+            "videos": videos_ids,
             "tags": tags
         }
 
@@ -201,9 +201,9 @@ class Video:
 
         return response.json()
 
-    def delete_tag_by_video_ids(self, videos_id: List = None, tag: str = None):
+    def delete_tag_by_video_ids(self, videos_ids: List = None, tag: str = None):
         id_obj = self.id
-        for video_id in videos_id:
+        for video_id in videos_ids:
             self.id = video_id
             response = self.delete_tag(tag)
             if response['message'] != 'Done':
@@ -213,9 +213,9 @@ class Video:
         self.id = id_obj
         return 'Tag deleted of all videos'
 
-    def delete_all_tag_by_video_ids(self, videos_id: List = None):
+    def delete_all_tag_by_video_ids(self, videos_ids: List = None):
         payload = {
-            "videos": videos_id,
+            "videos": videos_ids,
             "tags": []
         }
 

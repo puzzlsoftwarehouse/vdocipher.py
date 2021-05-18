@@ -79,7 +79,8 @@ video = vdocipher.Video(id=1).delete_tag('JavaScript')
 video = vdocipher.Video(id=1).delete_all_tags()
 
 # deleting a tags in multiple videos
-vdocipher.Video().delete_tag_by_video_ids(videos_id=video_list_id, tag='PythonJS')
+vidos_id = ['xdv23rosj940fj49jfd9ajl','29fjue98lsd934hfg9']
+vdocipher.Video().delete_tag_by_video_ids(videos_ids=vidos_id, tag='PythonJS')
 
 # deleting all tags in multiple videos
 video = vdocipher.Video().delete_tag_to_video_ids(videos_id=video_list_id)
@@ -139,7 +140,7 @@ otp = Video(title='test video').upload('file').create_otp()
  otp = vdocipher.OTP(ip_geo_rule=geo_rules_list).create(videoid='your_video_id')
  
  # obtaining video bandwidth
- video_obj = vdocipher.Video().get()
+ video_obj = vdocipher.Video(id='12rew').get()
  date_filter = date(year=2021, month=5, day=13)
  video_bandwidth = video_obj.bandwidth(date_filter)
  
@@ -149,9 +150,9 @@ otp = Video(title='test video').upload('file').create_otp()
  list_video_bandwidth = bandwidth.get(date_filter=date_filter)
  
  # obtaining video from bandwidth
-  bandwidth = vdocipher.VideoBandwidth()
-  video_bandwidth = bandwidth.get(date_filter)[0]
-  video = video_bandwidth.video
+ bandwidth = vdocipher.VideoBandwidth()
+ video_bandwidth = bandwidth.get(date_filter)[0]
+ video = video_bandwidth.video
  
 
 ```
