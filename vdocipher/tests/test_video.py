@@ -261,7 +261,7 @@ class TestVideo(BaseTest):
 
     def test_upload_poster(self, video: Video):
 
-        with open('resources/test_poster.png', 'rb') as file:
+        with open('resources/test_poster.jpg', 'rb') as file:
             video.upload_poster(file=file)
 
         video_obj = video.get()

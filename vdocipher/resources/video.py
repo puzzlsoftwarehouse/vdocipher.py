@@ -306,7 +306,7 @@ class Video:
 
     def upload_poster(self, file: IO):
         extension = pathlib.Path(file.name).suffix.replace('.', '')
-        if not extension in ['png', 'jpeg']:
+        if not extension in ['png', 'jpeg', 'jpg']:
             raise Exception(f'Invalid image extension={extension}')
 
         data = MultipartEncoder(fields=[
