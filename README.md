@@ -22,8 +22,14 @@ vdocipher.authenticate('VDOCIPHER_API_SECRET')
 # obtaining a list of videos
 videos = vdocipher.Video().get_list()
 
+# obtaining a list of all videos
+videos = vdocipher.Video().get_all()
+
 # uploading a video
 new_video = vdocipher.Video(title='title').upload('file')
+
+# uploading a video from HTTP(s)/FTP urls
+new_video = .vdocipher.Video().upload_by_url('url_video')
 
 # obtaining a video
 video = vdocipher.Video(id=1).get()
@@ -66,12 +72,27 @@ tag_list_replace = ['Python', 'Rust', 'TypeScript']
 
 replace = vdocipher.Video().replace_tag(videos_id=video_list_id, tags=tag_list_replace)
 
-# deleteing video tag
-video = vdocipher.Video(id=1).delete_tag()
+# deleting video tag
+video = vdocipher.Video(id=1).delete_tag('JavaScript')
 
-# deleteingg tag in multiple videos
+# deleting all video tags
+video = vdocipher.Video(id=1).delete_all_tags()
+
+# deleting a tags in multiple videos
+vidos_id = ['xdv23rosj940fj49jfd9ajl','29fjue98lsd934hfg9']
+vdocipher.Video().delete_tag_by_video_ids(videos_ids=vidos_id, tag='PythonJS')
+
+# deleting all tags in multiple videos
 video = vdocipher.Video().delete_tag_to_video_ids(videos_id=video_list_id)
 
+# List all files of a video including captions and posters
+video = vdocipher.Video().list_all_files()
+
+# adding a video poster
+poster = vdocipher.Video(id=1).upload_poster('file')
+
+# obtaining post url
+poster_url = vdocipher.Video(id=1).get_url_posters()
 
 # obtaining OTP
 otp = OTP().create(videoid='your_video_id')
@@ -95,6 +116,7 @@ otp = Video(title='test video').upload('file').create_otp()
  otp = vdocipher.OTP(annotations=annotate_list).create(videoid='your_video_id')
  
  # generating OTP for offline use
+
  duration = 15 * 24 * 3600 
  rule = LicenseRules(
      can_persist=True,
@@ -117,6 +139,20 @@ otp = Video(title='test video').upload('file').create_otp()
  geo_rule_list = [geo_rule]
  otp = vdocipher.OTP(ip_geo_rule=geo_rules_list).create(videoid='your_video_id')
  
+ # obtaining video bandwidth
+ video_obj = vdocipher.Video(id='12rew').get()
+ date_filter = date(year=2021, month=5, day=13)
+ video_bandwidth = video_obj.bandwidth(date_filter)
+ 
+ # obtaining all video bandwidth
+ date_filter = date(year=2021, month=5, day=13)
+ bandwidth = vdocipher.VideoBandwidth()
+ list_video_bandwidth = bandwidth.get(date_filter=date_filter)
+ 
+ # obtaining video from bandwidth
+ bandwidth = vdocipher.VideoBandwidth()
+ video_bandwidth = bandwidth.get(date_filter)[0]
+ video = video_bandwidth.video
  
 
 ```

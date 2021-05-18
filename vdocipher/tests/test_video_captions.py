@@ -5,7 +5,7 @@ from vdocipher.tests.conftest import BaseTest
 
 class TestVideoSubtitle(BaseTest):
 
-    def test_video_subtitle(self, video: Video):
+    def test_video_upload_subtitle(self, video: Video):
         with open('resources/test_caption.vtt', 'rb') as subtitle_file:
             subtitle: Subtitle = video.upload_subtitle(subtitle_file, language='en')
 
