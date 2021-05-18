@@ -205,11 +205,10 @@ class Video:
         id_obj = self.id
         for video_id in videos_id:
             self.id = video_id
-            try:
-                self.delete_tag(tag)
-            except:
+            response = self.delete_tag(tag)
+            if response['message'] != 'Done':
                 self.id = id_obj
-                return f'error deleting video tag (id = {video_id})'
+                raise Exception(f'error deleting video tag (id = {video_id})')
 
         self.id = id_obj
         return 'Tag deleted of all videos'
