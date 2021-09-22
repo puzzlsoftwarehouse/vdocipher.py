@@ -46,7 +46,7 @@ jobs:
     - name: Test with pytest
       run: |
         cd vdocipher/tests
-        pytest
+        VDOCIPHER_API_SECRET=${{ secrets.VDOCIPHER_API_SECRET }} pytest
         cd ../..
      
      # Upload to TestPyPI
