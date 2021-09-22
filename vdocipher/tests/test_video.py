@@ -257,7 +257,7 @@ class TestVideo(BaseTest):
             video.upload_poster(file=file)
 
         response = video.get_all_files()
-        assert len(response) == 5
+        assert len(response) > 0
 
     def test_upload_poster(self, video: Video):
 
