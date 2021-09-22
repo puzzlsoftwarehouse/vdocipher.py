@@ -81,16 +81,16 @@ class Video:
     id: str = None
     title: str = None
     description: str = None
+    upload_time: int = None
     length: int = None
     status: str = None
     public: int = None
-    upload_time: int = None
-    white_list_href: str = field(metadata=config(field_name="whitelisthref"), default=None)
     ip_geo_rules: List[IPGeoRule] = field(metadata=config(field_name="ipGeoRules"), default=None)
-    posters: List = None
+    white_list_href: str = field(metadata=config(field_name="whitelisthref"), default=None)
+    posters: List[str] = None
     poster: str = None
+    tags: List[str] = None
     total_size_bytes: int = field(metadata=config(field_name="totalSinzeBytes"), default=None)
-    tags: List = None
     bandwidth: str = None
 
     def get_list(self, page: int = 1, limit: int = 10) -> List['Video']:
@@ -134,7 +134,7 @@ class Video:
 
         return response.json()
 
-    def add_tag_to_video_ids(self, video_ids: List = None, tags: List = None):
+    def add_tag_to_video_ids(self, video_ids: List[str] = None, tags: List[str] = None):
         payload = {
             "videos": video_ids,
             "tags": tags
@@ -157,7 +157,7 @@ class Video:
 
         return response.json()['rows']
 
-    def replace_tag(self, tags: List = None):
+    def replace_tag(self, tags: List[str] = None):
         payload = {
             "videos": [self.id],
             "tags": tags
@@ -167,7 +167,7 @@ class Video:
 
         return response.json()
 
-    def replace_tag_to_video_ids(self, video_ids: List = None, tags: List = None):
+    def replace_tag_to_video_ids(self, video_ids: List[str] = None, tags: List[str] = None):
         payload = {
             "videos": video_ids,
             "tags": tags
@@ -201,7 +201,7 @@ class Video:
 
         return response.json()
 
-    def delete_tag_by_video_ids(self, video_ids: List = None, tag: str = None):
+    def delete_tag_by_video_ids(self, video_ids: List[str] = None, tag: str = None):
         id_obj = self.id
         for video_id in video_ids:
             self.id = video_id
@@ -213,7 +213,7 @@ class Video:
         self.id = id_obj
         return 'Tag deleted of all videos'
 
-    def delete_all_tag_by_video_ids(self, video_ids: List = None):
+    def delete_all_tag_by_video_ids(self, video_ids: List[str] = None):
         payload = {
             "videos": video_ids,
             "tags": []

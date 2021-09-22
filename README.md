@@ -1,4 +1,4 @@
-# vdocipher.py
+# vdocipher.py  v0.5.1
 Just a VdoCipher api wrapper for python.
 
 Installing
