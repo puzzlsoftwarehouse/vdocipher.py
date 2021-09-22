@@ -45,7 +45,9 @@ jobs:
     
     - name: Test with pytest
       run: |
+        cd vdocipher/tests
         pytest
+        cd ../..
      
      # Upload to TestPyPI
     - name: Build and Upload to TestPyPI
